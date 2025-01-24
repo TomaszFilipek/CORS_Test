@@ -1,0 +1,13 @@
+services:
+  api:
+    image: api:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: API
+    ports:
+      - 80
+      - 443
+    user: "root:root"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
