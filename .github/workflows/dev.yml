@@ -19,11 +19,11 @@ jobs:
 
     - name: Build Docker image with a tag
       run: |
-        docker build -t CorsTestApi:latest ./API/API
+        docker build -t corstestapi:latest ./API/API
 
     - name: Save Docker image to tar file
       run: |
-        docker save -o CorsTestApi.tar CorsTestApi:latest
+        docker save -o CorsTestApi.tar corstestapi:latest
 
     - name: Copy Docker image to VPS
       env:
@@ -73,11 +73,11 @@ jobs:
 
     - name: Build Docker image
       run: |
-        docker build -t CorsTestFront ./FRONT
+        docker build -t corstestfront ./FRONT
 
     - name: Save Docker image to tar file
       run: |
-        docker save -o CorsTestFront.tar CorsTestFront
+        docker save -o CorsTestFront.tar corstestfront
 
     - name: Copy Docker image to VPS
       env:
