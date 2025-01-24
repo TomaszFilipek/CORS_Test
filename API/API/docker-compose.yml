@@ -1,10 +1,10 @@
 services:
   api:
-    image: api:latest
+    image: corstestapi:latest
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: API
+    container_name: CorsTestApi
     ports:
       - 80
       - 443
