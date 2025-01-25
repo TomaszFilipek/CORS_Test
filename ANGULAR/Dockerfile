@@ -14,7 +14,7 @@ FROM nginx:alpine
 
 RUN ls -l
 
-COPY --from=build /app/dist/garage-manager-front /usr/share/nginx/html
+COPY --from=build /app/dist/testcors-angular /usr/share/nginx/html
 COPY ./nginx.conf /etc/nginx/nginx.conf
 
 EXPOSE 80
