@@ -19,7 +19,7 @@ jobs:
 
     - name: Build Docker image
       run: |
-        docker build -t corstestfront ./FRONT
+        docker build -t corstestfront ./ANGULAR
 
     - name: Save Docker image to tar file
       run: |

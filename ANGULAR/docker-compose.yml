@@ -1,0 +1,11 @@
+services:
+  temperaturapp:
+    image: corstestfront:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: CorsTestFront
+    ports:
+      - "40216:80"
+    user: "root:root"
+    restart: always

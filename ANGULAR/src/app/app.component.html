@@ -1,0 +1,9 @@
+<div class="container">
+  <h1>API Data Viewer</h1>
+  <div *ngIf="data; else loading">
+    <pre>{{ data | json }}</pre>
+  </div>
+  <ng-template #loading>
+    <p>Ładowanie danych...</p>
+  </ng-template>
+</div>
