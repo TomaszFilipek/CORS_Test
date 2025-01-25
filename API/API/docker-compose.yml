@@ -9,5 +9,8 @@ services:
       - 80
       - 443
     user: "root:root"
+    volumes:
+      - ./data/:/app/db
+      - ~/.aspnet/https:/https:ro
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
