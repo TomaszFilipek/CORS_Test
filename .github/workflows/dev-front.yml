@@ -1,0 +1,113 @@
+name: Deploy FRONT to VPS
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+  
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Docker
+      uses: docker/setup-buildx-action@v2
+
+    - name: Build Docker image with a tag
+      run: |
+        docker build -t corstestapi:latest ./API/API
+
+    - name: Save Docker image to tar file
+      run: |
+        docker save -o CorsTestApi.tar corstestapi:latest
+
+    - name: Copy Docker image to VPS
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        VPS_USER: ${{ secrets.VPS_USER }}
+        VPS_HOST: ${{ secrets.VPS_HOST }}
+        VPS_PORT: ${{ secrets.VPS_PORT }}
+      run: |
+        echo "$SSH_PRIVATE_KEY" > private_key.pem
+        chmod 600 private_key.pem
+        mkdir docker
+        mv CorsTestApi.tar ./docker/
+        ls -l ./
+        cp ./API/API/docker-compose.yml ./docker/
+        # mkdir ./docker/data
+        # cp ./Data/Database/* ./docker/data
+        rsync -v --delete -r --ignore-existing -e "ssh -p $VPS_PORT -o StrictHostKeyChecking=no -i private_key.pem" ./docker/ $VPS_USER@$VPS_HOST:~/app/CorsTest/CorsTestApi/
+        scp -P $VPS_PORT -o StrictHostKeyChecking=no -i private_key.pem -r ./docker/* $VPS_USER@$VPS_HOST:~/app/CorsTest/CorsTestApi/
+
+    - name: Load Docker image on VPS and deploy
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        VPS_USER: ${{ secrets.VPS_USER }}
+        VPS_HOST: ${{ secrets.VPS_HOST }}
+        VPS_PORT: ${{ secrets.VPS_PORT }}
+      run: |
+        echo "$SSH_PRIVATE_KEY" > private_key.pem
+        chmod 600 private_key.pem    
+        ssh -p $VPS_PORT -o StrictHostKeyChecking=no -i private_key.pem $VPS_USER@$VPS_HOST << 'EOF'
+        cd ~/app/CorsTest/CorsTestApi/
+        docker load -i ./CorsTestApi.tar
+        docker-compose down
+        docker-compose up -d
+        docker image prune -f  # Usuñ stare, nieu¿ywane obrazy
+        # EOF
+
+
+  deployapp:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Docker
+      uses: docker/setup-buildx-action@v2
+
+    - name: Build Docker image
+      run: |
+        docker build -t corstestfront ./FRONT
+
+    - name: Save Docker image to tar file
+      run: |
+        docker save -o CorsTestFront.tar corstestfront
+
+    - name: Copy Docker image to VPS
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        VPS_USER: ${{ secrets.VPS_USER }}
+        VPS_HOST: ${{ secrets.VPS_HOST }}
+        VPS_PORT: ${{ secrets.VPS_PORT }}
+      run: |
+        echo "$SSH_PRIVATE_KEY" > private_key.pem
+        chmod 600 private_key.pem
+        mkdir docker
+        mv temperaturapp.tar ./docker/
+        cp ./GarageManager-Front/docker-compose.yml ./docker/
+
+        scp -P $VPS_PORT -o StrictHostKeyChecking=no -i private_key.pem -r ./docker/* $VPS_USER@$VPS_HOST:~/app/CorsTest/CorsTestFront
+
+    - name: Load Docker image on VPS and deploy
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        VPS_USER: ${{ secrets.VPS_USER }}
+        VPS_HOST: ${{ secrets.VPS_HOST }}
+        VPS_PORT: ${{ secrets.VPS_PORT }}
+      run: |
+        echo "$SSH_PRIVATE_KEY" > private_key.pem
+        chmod 600 private_key.pem    
+        ssh -p $VPS_PORT -o StrictHostKeyChecking=no -i private_key.pem $VPS_USER@$VPS_HOST << 'EOF'
+        cd ~/app/CorsTest/CorsTestFront
+        docker rmi CorsTestFront:latest || true
+        docker load -i ./CorsTestFront.tar
+        docker-compose down
+        docker-compose up -d
+        docker image prune -f  # Usuń stare, nieużywane obrazy
+        EOF
