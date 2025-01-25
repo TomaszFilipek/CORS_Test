@@ -37,8 +37,8 @@ jobs:
         echo "$SSH_PRIVATE_KEY" > private_key.pem
         chmod 600 private_key.pem
         mkdir docker
-        mv temperaturapp.tar ./docker/
-        cp ./GarageManager-Front/docker-compose.yml ./docker/
+        mv CorsTestApi.tar ./docker/
+        cp ./ANGULAR/docker-compose.yml ./docker/
 
         scp -P $VPS_PORT -o StrictHostKeyChecking=no -i private_key.pem -r ./docker/* $VPS_USER@$VPS_HOST:~/app/CorsTest/CorsTestFront
 
