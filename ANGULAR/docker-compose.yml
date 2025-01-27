@@ -6,6 +6,6 @@ services:
       dockerfile: Dockerfile
     container_name: CorsTestFront
     ports:
-      - "40216:80"
+      - "6602:80"
     user: "root:root"
     restart: always

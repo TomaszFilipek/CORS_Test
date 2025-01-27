@@ -13,13 +13,11 @@ namespace API
                 options.AddPolicy("AllowAllOrigins",
                     builder =>
                     {
-                        builder.WithOrigins("http://localhost:4200",
-                            "https://testcors.bieda.it",
-                            "https://testcors.bieda.it/",
-                             "https://testcorsng.bieda.it",
-                            "https://testcorsng.bieda.it/",
-                             "https://testcorsngg.bieda.it",
-                            "https://testcorsngg.bieda.it/")
+                        builder.WithOrigins(
+                              "http://xxtestapp.toadres.pl",
+                              "https://xxtestapp.toadres.pl",
+                              "http://xxtestapp.toadres.pl/",
+                              "https://xxtestapp.toadres.pl/")
                             .AllowAnyHeader()
                             .AllowAnyMethod()
                             .AllowCredentials();

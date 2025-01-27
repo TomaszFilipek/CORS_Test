@@ -6,8 +6,7 @@ services:
       dockerfile: Dockerfile
     container_name: CorsTestApi
     ports:
-      - 40215:5000
-      - 40214:5001
+      - 6601:80
     user: "root:root"
     volumes:
       - ./data/:/app/db
