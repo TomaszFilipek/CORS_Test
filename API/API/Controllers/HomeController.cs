@@ -5,7 +5,7 @@ using System.Text.Json;
 namespace API.Controllers
 {
     [ApiController]
-    [Route("/")]
+    [Route("api/[controller]")]
     public class HomeController : ControllerBase
     {
         [HttpGet]
