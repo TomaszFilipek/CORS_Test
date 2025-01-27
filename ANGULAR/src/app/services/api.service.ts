@@ -6,7 +6,8 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class ApiService {
-  private apiUrl = 'https://xxtestapi.toadres.pl/'; //'https://testcors.bieda.it';
+  private apiBaseUrl = 'https://xxtestapi.toadres.pl/api'; //'https://testcors.bieda.it';
+  private readonly apiUrl = `${this.apiBaseUrl}/Home`;
 
   constructor(private http: HttpClient) {}
 
